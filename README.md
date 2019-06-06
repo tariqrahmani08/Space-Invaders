@@ -41,11 +41,11 @@ Once the project has properly compiled, the executible will be found in the root
 
 The game is played with an SNES controller. 
 
-![](https://github.com/DanielContreras/Space-Invaders/assets/controls)
+![](https://github.com/DanielContreras/Space-Invaders/blob/master/assets/controls.png)
 
 ### Instructions
 
-![](https://github.com/DanielContreras/Space-Invaders/assets/instructions)
+![](https://github.com/DanielContreras/Space-Invaders/blob/master/assets/instructions.gif)
 
 ## Authors
 
