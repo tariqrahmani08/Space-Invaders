@@ -1,34 +1,67 @@
 #include <unistd.h>
+#include <stdio.h>
+#include <wiringPi.h>
 #include "GPIO_INIT.h"
-
-#define GPIO_BASE 0x3F200000
-
-static unsigned *gpio = (unsigned*)GPIO_BASE;
-
-#define INP_GPIO(g) *(gpio + ((g)/10)) &= ~(7<<(((g)%10)*3))
-#define OUT_GPIO(g) *(gpio + ((g)/10)) |= (1<<(((g)%10)*3))
-#define SET_GPIO_ALT(g, a) *(gpio + (((g)/10))) |= (((a) <= 3? (a) + 4: (a) == 4 ? 3 : 2) << (((g)%10)*3))
-
-#define CLK 11
-#define LAT 9
-#define DAT 10
-
-#define CLO_REG 0x3F003004
-
-unsigned *clo = (unsigned*)CLO_REG;
-
+#include "controller.h"
 
 int main()
-{
-	return 0;
-}
-
-void initSNES()
-{
-    INP_GPIO(CLK);
-    OUT_GPIO(CLK);
-    INP_GPIO(LAT);
-    OUT_GPIO(LAT);
-    INP_GPIO(DAT);
-    OUT_GPIO(DAT);
+{   
+    unsigned int *gpio = gpioPtr();
+    unsigned int input = 0;
+    unsigned int oldInput = 0;
+    printf("Created by: Tariq Rahmani, Daniel Contreras, Benjamin Sterling\n");
+    printf("Please press a button...\n");
+    while (oldInput != 4)
+    {   
+        while(input == 0)
+        {   
+            input = read_snes(gpio);
+            if (input == 0 && oldInput != 0)
+            {   
+                switch(oldInput)
+                {
+                    case 1:
+                        printf ("You have pressed B\n");
+                        break;
+                    case 2:
+                        printf ("You have pressed Y\n");
+                        break;
+                    case 3:
+                        printf ("You have pressed Select\n");
+                        break;
+                    case 5:
+                        printf ("You have pressed Joy-pad UP\n");
+                        break;
+                    case 6:
+                        printf ("You have pressed Joy-pad DOWN\n");
+                        break;
+                    case 7:
+                        printf ("You have pressed Joy-pad LEFT\n");
+                        break;
+                    case 8:
+                        printf ("You have pressed Joy-pad RIGHT\n");
+                        break;
+                    case 9:
+                        printf ("You have pressed A\n");
+                        break;
+                    case 10:
+                        printf ("You have pressed X\n");
+                        break;
+                    case 11:
+                        printf ("You have pressed LEFT\n");
+                        break;
+                    case 12:
+                        printf ("You have pressed RIGHT\n");
+                        break;
+                }
+                printf("Please press a button...\n");
+                break;
+            }
+        }
+        oldInput = input;
+        input = 0;
+        delay(50);
+    }
+    printf("Program is terminating...\n");
+    return 0;
 }
